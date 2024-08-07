@@ -33,14 +33,58 @@ The two methods will be tested using 5 cent increments between 5 cents and 30 ce
 1. Draw binary expression trees for the following infix expressions.  Your trees should enforce the Java rules for operator evaluation (higher-precedence operators before lower-precedence operators and left associativity.) Note: they should also preserve the order seen in the expressions.
   - `x / y + a - b * c`
 
-[//Insert image here//]
+
+
   - `(x * a) - y / b * (c + d)`
 
-[//Insert image here//]
+
   
   - `(x + (a * (b - c)))/ d`
 
-[//Insert image here//]
+  ## CS113-Lab 06-RecursionTrees
+
+### Expression Trees
+
+1. **Expression Trees**:
+    - `x / y + a - b * c`:
+      ```
+              -
+            /   \
+           +     *
+          / \   / \
+         /   \ b   c
+        x     y
+      ```
+
+    - `(x * a) - y / b * (c + d)`:
+      ```
+                 -
+              /      \
+           *         *
+          / \       / \
+         x   a     /   \
+                  /     \
+                 /       \
+                y         /
+                         b
+                        / \
+                       c   d
+      ```
+
+    - `(x + (a * (b - c))) / d`:
+      ```
+                /
+             /     \
+           +         d
+          / \
+         x   *
+            / \
+           a   -
+              / \
+             b   c
+      ```
+## All the other questions have dead links. I am afraid I cannot answer them. Perhaps they worked on replit ed before deprecation?
+
   
 2. Using the Huffman tree in the figure below:
 
@@ -71,7 +115,7 @@ The two methods will be tested using 5 cent increments between 5 cents and 30 ce
 
 ![Image of tree for problem 4A](doc/problemImages/problem4A.png)
 
-` insert answer here `
+`  `
 
 ![Image of tree for problem 4B](doc/problemImages/problem4B.png)
 
