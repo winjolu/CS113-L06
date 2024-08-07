@@ -1,25 +1,19 @@
+package edu.miracosta.cs113.change;
 
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-/**
- * ChangeCalculator : Class containing the recursive method calculateChange, which determines and prints all
- * possible coin combinations representing a given monetary value in cents.
- *
- * Problem derived from Koffman & Wolfgang's Data Structures: Abstraction and Design Using Java (2nd ed.):
- * Ch. 5, Programming Project #7, pg. 291.
- *
- * NOTE: An additional method, printCombinationsToFile(int), has been added for the equivalent tester file to
- * verify that all given coin combinations are unique.
- */
-//public class ChangeCalculator {
+public class ChangeCalculator {
 
     // List for storing all possible combinations.
+    private static List<String> combinations = new ArrayList<>();
 
     // Coins used in counting total number of combinations.
-
-
+    private static final int[] coins = {25, 10, 5, 1};
 
     /**
      * Wrapper method for determining all possible unique combinations of quarters, dimes, nickels, and pennies that
@@ -33,12 +27,14 @@ import java.util.ArrayList;
      * @param cents a monetary value in cents
      * @return the total number of unique combinations of coins of which the given value is comprised
      */
-//    public static int calculateChange(int cents) {
-//        // TODO:
-//        // Implement a recursive solution following the given documentation.
-//
-//        return calculateChange(cents, 0);
-//    }
+    public static int calculateChange(int cents) {
+        combinations.clear();
+        calculateChangeHelper(cents, 0, 0, 0, 0);
+        for (String combination : combinations) {
+            System.out.println(combination);
+        }
+        return combinations.size();
+    }
 
     /**
      * Calls upon calculateChange(int) to calculate and print all possible unique combinations of quarters, dimes,
@@ -49,15 +45,16 @@ import java.util.ArrayList;
      *
      * @param cents a monetary value in cents
      */
-//    public static void printCombinationsToFile(int cents) {
-//        // TODO:
-//        // This when calculateChange is complete. Note that the text file must be created within this directory.
-//
-//
-//    }
-
-
-
+    public static void printCombinationsToFile(int cents) {
+        calculateChange(cents);
+        try (PrintWriter writer = new PrintWriter(new FileOutputStream("CoinCombinations.txt"))) {
+            for (String combination : combinations) {
+                writer.println(combination);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Helper method that calculates all the different combinations of change possible. Calls addCombination() to add the
@@ -69,18 +66,31 @@ import java.util.ArrayList;
      * @param d number of dimes.
      * @param n number of nickels.
      * @param p number of pennies.
-     * @return number of possible ways to make change.
      */
-
-
-    /**
-     * Calculates the total possible combinations.
-     *
-     * @param amount monetary currency in cents.
-     * @param coinHolder position of coin used from the coins array.
-     * @return the total number of combinations.
-     */
-
+    private static void calculateChangeHelper(int cents, int q, int d, int n, int p) {
+        if (cents == 0) {
+            addCombination(q, d, n, p);
+            return;
+        }
+        for (int i = 0; i < coins.length; i++) {
+            if (cents >= coins[i]) {
+                switch (i) {
+                    case 0:
+                        calculateChangeHelper(cents - coins[i], q + 1, d, n, p);
+                        break;
+                    case 1:
+                        calculateChangeHelper(cents - coins[i], q, d + 1, n, p);
+                        break;
+                    case 2:
+                        calculateChangeHelper(cents - coins[i], q, d, n + 1, p);
+                        break;
+                    case 3:
+                        calculateChangeHelper(cents - coins[i], q, d, n, p + 1);
+                        break;
+                }
+            }
+        }
+    }
 
     /**
      * Adds the combination to the array list.
@@ -90,6 +100,10 @@ import java.util.ArrayList;
      * @param n number of nickels.
      * @param p number of pennies.
      */
-
-
-//} // End of class ChangeCalculator
+    private static void addCombination(int q, int d, int n, int p) {
+        String combination = "[" + q + ", " + d + ", " + n + ", " + p + "]";
+        if (!combinations.contains(combination)) {
+            combinations.add(combination);
+        }
+    }
+}
